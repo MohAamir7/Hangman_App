@@ -6,13 +6,14 @@ import Button from "../Buttons/Buttons";
 function TextInputForm({inputType,onSubmitHandler,onHandlerTextInput,onTextChangeHandler}){
     
     return(
-        <form onSubmit={onSubmitHandler}>
-        <div>
+        <form onSubmit={onSubmitHandler} className="space-y-6 flex-col items-center">
+        <div className="flex flex-col text-left">
             <TextInput
             type={inputType}
-            label='Enter a word or pharse'
-            placeholder='Enter a word or a Pharse'
+            label=''
+            placeholder='Enter a word '
             onChangeHandler={onHandlerTextInput}
+            className="my-1"
             
             />
         </div>
@@ -21,8 +22,7 @@ function TextInputForm({inputType,onSubmitHandler,onHandlerTextInput,onTextChang
             type='button'
             text={inputType==='password'?'Show':'Hide'}
             // onClickHandler={onChangeText}
-            onClickHandler = {onTextChangeHandler}
-            
+            onClickHandler = {onTextChangeHandler} 
             />
         </div>
         <div>

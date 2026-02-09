@@ -1,11 +1,12 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import MaskedText from "../MaskedText/MaskedText";
 import LetterButton from "../LetterButton/LetterButtons";
 import { useState } from "react";
 import Hangman from "../Hangman/hangman";
-import GameOver from "../GameStartOver/GameOver";
+import GameResultModal from "../GameResult/GameResultModal";
 function playGame() {
   let location = useLocation();
+  let navigate = useNavigate();
   const word = location.state?.word;
   if (!word) {
     return <div>No word found. Go back to start.</div>;
@@ -18,11 +19,19 @@ function playGame() {
 
   const maxAttempt = 7;
 
-  const isGameOver = wrongGuesses > maxAttempt;
+  const isGameOver = wrongGuesses >= maxAttempt;
 
-  const isWinner = word.toUpperCase().split('').every(letter=>
-    guessedLetter.includes(letter)
-  )
+  const isWinner = word
+    .toUpperCase()
+    .split("")
+    .every((letter) => guessedLetter.includes(letter));
+
+  const isOpenModal = isGameOver || isWinner;
+  function reStartGame() {
+    setguessedLetter([]);
+    setstep(0);
+    navigate("/start");
+  }
   function handleLetterClick(letter) {
     // console.log("Clicked:", letter);
     if (word?.toUpperCase().includes(letter)) {
@@ -31,28 +40,43 @@ function playGame() {
       // console.log('Wrong');
       setstep(step + 1);
     }
-    if(isGameOver || isWinner) return;
+    if (isGameOver || isWinner) return;
     setguessedLetter([...guessedLetter, letter]);
   }
   return (
-    <div>
-      <h1>Play Game</h1>
-      {isGameOver && (<h2 className="text-red-500 text-2xl">Game Over 😢</h2>)}
-      {isWinner && (<h2 className="text-green-500 text-2xl">You Win 🎉</h2>)}
-      <MaskedText text={location.state.word} guessWord={guessedLetter} />
-      <div className="my-2">
-        <LetterButton
-          text={word}
-          guessedLetter={guessedLetter}
-          onLetterClick={handleLetterClick}
-          disabled = {isGameOver || isWinner}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 flex items-center justify-center p-6">
+      <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl w-full max-w-4xl p-8 text-white animate-scaleIn">
+        <h1 className="text-4xl font-bold text-center mb-6 tracking-wide">
+          🎯 Hangman Game
+        </h1>
+        <div className="flex justify-center mb-6 text-2xl font-semibold tracking-widest">
+          <MaskedText text={location.state.word} guessWord={guessedLetter} />
+        </div>
+        <div className="my-4 flex justify-center flex-wrap">
+          <LetterButton
+            text={word}
+            guessedLetter={guessedLetter}
+            onLetterClick={handleLetterClick}
+            disabled={isGameOver || isWinner}
+          />
+        </div>
+        <div className="flex justify-center mt-6 animate-float">
+          <Hangman step={step} />
+        </div>
+        <GameResultModal
+          isOpenModal={isOpenModal}
+          reStartGame={reStartGame}
+          isWinner={isWinner}
+          word={word}
         />
-      </div>
-      <Link to="/start" className="text-blue-400">
-        Start Game
-      </Link>
-      <div>
-        <Hangman step={step} />
+        <div className="flex justify-center my-3">
+          <Link
+            to="/start"
+            className="inline-block text-center w-2xs bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 rounded-xl font-semibold shadow-lg hover:scale-90 transition-transform duration-300 hover:shadow-purple-500/50"
+          >
+            Start Game
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ function LetterButton({ text, guessedLetter,onLetterClick,disabled }) {
         value={letter}
         onClick={handleLetterClick}
         disabled={disabled || guessedLetterSet.has(letter)}
-        className={`h-12 w-12 m-3 text-white rounded-md cursor-pointer ${buttonStyle(letter)}`}
+        className={`h-12 w-12 m-3 p-2 text-white rounded-md cursor-pointer ${buttonStyle(letter)}`}
         >
         {letter}
         </button>
