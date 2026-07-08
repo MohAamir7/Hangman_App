@@ -7,6 +7,7 @@ import GameResultModal from "../GameResult/GameResultModal";
 function playGame() {
   let location = useLocation();
   let navigate = useNavigate();
+  // console.log(location.state.word);
   const word = location.state?.word;
   if (!word) {
     return <div>No word found. Go back to start.</div>;
@@ -30,7 +31,7 @@ function playGame() {
   function reStartGame() {
     setguessedLetter([]);
     setstep(0);
-    navigate("/start");
+    navigate("/home");
   }
   function handleLetterClick(letter) {
     // console.log("Clicked:", letter);

@@ -9,13 +9,15 @@ import TextInputFormContainer from './components/TextInputform/TextInputformCona
 import { Route, Routes } from 'react-router-dom'
 import StartGame from './components/Pages/StartGame'
 import PlayGame from './components/Pages/Play'
+import Home from './components/Pages/Home'
 
 function App() {
   // const [count, setCount] = useState(0)
 
   return (
     <Routes>
-      <Route path='/' element ={<StartGame/>}></Route>
+      <Route path='/home' element = {<Home/>}></Route>
+      <Route path='/home' element ={<Home/>}></Route>
       <Route path='/start' element={<StartGame/>}></Route>
       <Route path='/play' element = {<PlayGame/>}></Route>
       
