@@ -1,28 +1,31 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MaskedText from "../MaskedText/MaskedText";
 import LetterButton from "../LetterButton/LetterButtons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Hangman from "../Hangman/hangman";
 import GameResultModal from "../GameResult/GameResultModal";
+import { WordContext } from "../../ContextAPI/WordContext";
 function playGame() {
+  const {wordList,selectedWord} = useContext(WordContext);
+  console.log(wordList);
   let location = useLocation();
   let navigate = useNavigate();
   // console.log(location.state.word);
-  const word = location.state?.word;
-  if (!word) {
+  // const word = location.state?.word;
+  if (!selectedWord) {
     return <div>No word found. Go back to start.</div>;
   }
   const [step, setstep] = useState(0);
   let [guessedLetter, setguessedLetter] = useState([]);
   const wrongGuesses = guessedLetter.filter(
-    (letter) => !word.toUpperCase().includes(letter),
+    (letter) => !selectedWord.toUpperCase().includes(letter),
   ).length;
 
   const maxAttempt = 7;
 
   const isGameOver = wrongGuesses >= maxAttempt;
 
-  const isWinner = word
+  const isWinner = selectedWord
     .toUpperCase()
     .split("")
     .every((letter) => guessedLetter.includes(letter));
@@ -35,7 +38,7 @@ function playGame() {
   }
   function handleLetterClick(letter) {
     // console.log("Clicked:", letter);
-    if (word?.toUpperCase().includes(letter)) {
+    if (selectedWord?.toUpperCase().includes(letter)) {
       // console.log('Correct');
     } else {
       // console.log('Wrong');
@@ -49,13 +52,14 @@ function playGame() {
       <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl w-full max-w-4xl p-8 text-white animate-scaleIn">
         <h1 className="text-4xl font-bold text-center mb-6 tracking-wide">
           🎯 Hangman Game
+           {/* {wordList.map(wordObject => <li key={wordObject.id}>{wordObject.wordValue}</li>)} */}
         </h1>
         <div className="flex justify-center mb-6 text-2xl font-semibold tracking-widest">
-          <MaskedText text={location.state.word} guessWord={guessedLetter} />
+          <MaskedText text={selectedWord} guessWord={guessedLetter} />
         </div>
         <div className="my-4 flex justify-center flex-wrap">
           <LetterButton
-            text={word}
+            text={selectedWord}
             guessedLetter={guessedLetter}
             onLetterClick={handleLetterClick}
             disabled={isGameOver || isWinner}
@@ -68,7 +72,7 @@ function playGame() {
           isOpenModal={isOpenModal}
           reStartGame={reStartGame}
           isWinner={isWinner}
-          word={word}
+          word={selectedWord}
         />
         <div className="flex justify-center my-3">
           <Link
