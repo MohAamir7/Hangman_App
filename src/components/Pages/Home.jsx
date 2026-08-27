@@ -10,7 +10,7 @@ export function home() {
 
     // const[selectedWord,setslectedWord] = useState('');
     async function fetchWord() {
-    let response = await fetch('http://localhost:3000/word');
+    // let response = await fetch('http://localhost:3000/word');
     let data = await response.json();
     console.log(data);
     setwordList([...data]);
