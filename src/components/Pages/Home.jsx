@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Button from "../Buttons/Buttons";
 import { useContext, useEffect, useState } from "react";
 import { WordContext } from "../../ContextAPI/WordContext";
+import{words} from "../../Data/WordData.js";
 
 
 
@@ -10,8 +11,9 @@ export function home() {
 
     // const[selectedWord,setslectedWord] = useState('');
     async function fetchWord() {
-    let response = await fetch('http://localhost:3000/word');
-    let data = await response.json();
+    // let response = await fetch('http://localhost:3000/word');
+    // let data = await response.json();
+    let data = [...words];
     console.log(data);
     setwordList([...data]);
 
